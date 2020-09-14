@@ -1,0 +1,33 @@
+.Submenu {
+  background: #3d3d3d;
+  width: 350px;
+  height: 100vh;
+  color: #d4d4d4;
+
+  .searchbar {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    background: #5e5e5e;
+    width: 95%;
+    margin: 10px auto 15px;
+    border-radius: 8px;
+
+    > input {
+      border: none;
+      background: transparent;
+      margin-left: 10px;
+      width: 100%;
+      color: #d4d4d4;
+
+      &::placeholder {
+        color: #c4c4c4;
+      }
+
+      &:focus {
+        border: none;
+        outline: none;
+      }
+    }
+  }
+}

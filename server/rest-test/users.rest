@@ -1,0 +1,24 @@
+GET http://localhost:3001/users/
+
+###
+
+POST http://localhost:3001/users/
+Content-Type: application/json
+
+{
+  "username": "fr3edom88",
+  "name": "Dany Prasetya",
+  "email": "dany_prasetya8@yahoo.co.id",
+  "password": "Aa1",
+  "address": "Jalan jalan"
+}
+
+###
+
+POST http://localhost:3001/users/login
+Content-Type: application/json
+
+{
+  "username": "asdf@asdf.com",
+  "password": "Lalulu123"
+}
