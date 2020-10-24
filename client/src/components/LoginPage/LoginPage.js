@@ -4,13 +4,14 @@ import { Link } from 'react-router-dom'
 import Card from '../../components/UI/Card/Card'
 import api from '../../api/users'
 import config from '../../config'
+import { CurrentUserContext } from '../../context/CurrentUserContext'
 
 import '../../assets/styles/index.scss'
 import './LoginPage.scss'
 
 export class LoginPage extends Component {
-  constructor (props) {
-    super(props)
+  constructor () {
+    super()
     this.state = {
       activeLoginTabList: [
         { id: 'USERNAME', text: 'Username login' },
@@ -18,23 +19,14 @@ export class LoginPage extends Component {
       ],
       activeLoginTab: 'USERNAME',
       form: {
-        username: '',
-        password: ''
+        username: 'username6',
+        password: 'Aa1'
       },
       errors: []
     }
   }
 
-  componentDidMount () {
-    const signed = window.localStorage.getItem('session')
-    if (signed) {
-      this.toHomePage()
-    }
-
-    setTimeout(() => {
-      window.localStorage.removeItem('session')
-    }, 600000)
-  }
+  static contextType = CurrentUserContext
 
   handleTabChange = id => {
     this.setState({ activeLoginTab: id })
@@ -56,11 +48,14 @@ export class LoginPage extends Component {
   doLogin = async () => {
     const { form } = this.state
     const errors = [...validateForm(form)]
+    const setCurrentUser = this.context[1]
+
     this.setState({ errors })
     if (!errors.length) {
       const res = await api.userLogin(form)
       
       if (res.status === 200) {
+        setCurrentUser(res.data)
         window.localStorage.setItem('session', JSON.stringify(form))
         this.toHomePage()
       }
@@ -96,6 +91,7 @@ export class LoginPage extends Component {
               type="text"
               className="p-6"
               onChange={this.handleInputChange}
+              value={this.state.form.username}
             />
             <input
               name="password"
@@ -103,6 +99,7 @@ export class LoginPage extends Component {
               type="password"
               className="p-6"
               onChange={this.handleInputChange}
+              value={this.state.form.password}
             />
           </div>
           <button

@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
+import { CurrentUserContext } from '../../context/CurrentUserContext'
 import SidebarMenu from '../SidebarMenu/SidebarMenu'
 import Submenu from '../UI/Submenu/Submenu'
 import UserDisplay from '../UserDisplay/UserDisplay'
 import TitleExpander from '../UI/TitleExpander/TitleExpander'
+import friendsApi from '../../api/friend'
 
 import '../../assets/styles/index.scss'
 import './HomePage.scss'
@@ -20,28 +22,32 @@ const dummyGroup = [
   }
 ]
 
-const dummyFriend = [
-  {
-    id: 'F-001',
-    name: 'Budi A',
-    status: 'My name is Budi A'
-  },
-  {
-    id: 'F-002',
-    name: 'Budi B',
-    status: 'My name is Budi B'
-  }
-]
-
 class HomePage extends Component {
-  constructor (props) {
-    super(props)
+  constructor () {
+    super()
     this.state = {
       groupCount: 10,
-      friendCount: 50,
+      friendCount: 0,
       groupList: dummyGroup,
-      friendList: dummyFriend
+      friendList: []
     }
+  }
+
+  static contextType = CurrentUserContext
+
+  componentDidMount () {
+    this.getFriendList()
+      .then(res => {
+        this.setState(() => ({
+          friendList: res.data,
+          friendCount: res.data.length
+        }))
+      })
+  }
+
+  async getFriendList () {
+    const [currentUser] = this.context
+    return await friendsApi.getFriend(currentUser.username)
   }
 
   handleSearching = e => {
@@ -70,38 +76,44 @@ class HomePage extends Component {
 
     const friendListEl = friendList.map(i => (
       <UserDisplay
-        key={i.id}
+        key={i.username}
         name={i.name}
         status={i.status}
       />
     ))
 
     return (
-      <div className="HomePage">
-        <SidebarMenu />
-        <Submenu
-          handleSearching={this.handleSearching}
-          searchPlaceholder="Search by display name"
-          useSearchbar
-        >
-          <UserDisplay
-            name="Dany Prasetya"
-            status="Hello world!"
-          />
+      <CurrentUserContext.Consumer>
+        {
+          ([currentUser]) => (
+            <div className="HomePage">
+              <SidebarMenu />
+              <Submenu
+                handleSearching={this.handleSearching}
+                searchPlaceholder="Search by display name"
+                useSearchbar
+              >
+                <UserDisplay
+                  name={currentUser.name}
+                  status={currentUser.profileStatus}
+                />
 
-          <TitleExpander
-            title="Groups"
-            extraAttribute={groupCount}
-            content={groupListEl}
-          />
+                <TitleExpander
+                  title="Groups"
+                  extraAttribute={groupCount}
+                  content={groupListEl}
+                />
 
-          <TitleExpander
-            title="Friends"
-            extraAttribute={friendCount}
-            content={friendListEl}
-          />
-        </Submenu>
-      </div>
+                <TitleExpander
+                  title="Friends"
+                  extraAttribute={friendCount}
+                  content={friendListEl}
+                />
+              </Submenu>
+            </div>
+          )
+        }
+      </CurrentUserContext.Consumer>
     )
   }
 }

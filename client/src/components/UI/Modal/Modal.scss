@@ -1,8 +1,30 @@
 .Modal {
+  .mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 2;
+    background: rgba($color: #000000, $alpha: .2)
+  }
+
+  &__container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #ccc;
+    z-index: 3;
+    background: #fff;
+  }
+
   &__header {
     height: 30px;
     color: #fff;
     background: #183153;
+    display: flex;
+    align-items: center;
 
     > div {
       width: 90%;
@@ -13,5 +35,9 @@
       width: 10%;
       text-align: center;
     }
-  }  
+  }
+
+  &__slot {
+    padding: 6px;
+  }
 }

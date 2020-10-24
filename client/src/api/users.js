@@ -10,5 +10,8 @@ export default {
   },
   getAllUsers () {
     return axios.get(config.api.users)
+  },
+  getUserByUsername (username) {
+    return axios.get(config.api.user(username))
   }
 }

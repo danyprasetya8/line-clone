@@ -10,9 +10,9 @@ import './RegistrationPage.scss'
 
 const inputEl = [
   {
-    name: 'id',
+    name: 'username',
     type: 'text',
-    placeholder: 'Id'
+    placeholder: 'Username'
   },
   {
     name: 'name',
@@ -47,7 +47,7 @@ export class RegisterPage extends Component {
     this.state = {
       inputEl,
       form: {
-        id: '',
+        username: '',
         name: '',
         email: '',
         password: '',
@@ -69,7 +69,7 @@ export class RegisterPage extends Component {
     
     if (!errors.length) {
       const res = await api.userRegistration(form)
-      if (res.status === 200) {
+      if (res.status === 201) {
         this.toLoginPage()
       }
     }
