@@ -1,0 +1,4 @@
+GET http://localhost:3001/users/username6/friends
+
+###
+POST http://localhost:3001/users/username6/friends/username2

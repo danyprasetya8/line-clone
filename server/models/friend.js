@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+Schema.Types.String.checkRequired(v => v != null)
 
-const user = new Schema({
+const friend = new Schema({
   username: {
     type: String,
     required: true
@@ -10,18 +11,10 @@ const user = new Schema({
     type: String,
     required: true
   },
-  email: {
-    type: String,
-    required: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  address: {
+  profileStatus: {
     type: String,
     required: true
   }
 })
 
-module.exports = mongoose.model('User', user)
+module.exports = mongoose.model('Friend', friend)
